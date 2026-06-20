@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027届师范生求职监督工具</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑,sans-serif}
+body{background:#f5f7fa;padding:0 0 60px}
+.header{background:#2d8cf0;color:#fff;padding:16px;text-align:center;font-weight:bold;font-size:20px}
+.tab{display:flex;position:sticky;top:0;background:#fff;z-index:10}
+.tab span{flex:1;text-align:center;padding:12px;color:#666}
+.tab span.active{color:#2d8cf0;font-weight:bold;border-bottom:2px solid #2d8cf0}
+.page{display:none}
+.page.show{display:block}
+.box{background:#fff;margin:10px;border-radius:10px;padding:16px}
+.title{font-weight:bold;font-size:16px;margin-bottom:10px;color:#222}
+.desc{font-size:14px;line-height:1.7;color:#444}
+.btn{background:#2d8cf0;color:#fff;border:none;padding:10px 14px;border-radius:6px;margin:5px 0}
+input,textarea{width:100%;border:1px solid #ddd;padding:10px;margin:6px 0;border-radius:6px}
+.time-item{margin:12px 0;padding-left:12px;border-left:3px solid #2d8cf0}
+.warn{color:red;font-weight:bold}
+</style>
+</head>
+<body>
+
+<div class="header">2027届师范生求职监督工具</div>
+
+<div class="tab">
+<span class="active" onclick="g(0)">首页</span>
+<span onclick="g(1)">全年规划</span>
+<span onclick="g(2)">就业渠道</span>
+<span onclick="g(3)">打卡记录</span>
+<span onclick="g(4)">个人信息</span>
+</div>
+
+<div class="page show" id="p0">
+<div class="box">
+<div class="title">📌 当前阶段提醒</div>
+<div class="desc warn" id="tip"></div>
+</div>
+<div class="box">
+<div class="title">⏰ 关键倒计时</div>
+<div class="desc" id="down"></div>
+</div>
+</div>
+
+<div class="page" id="p1">
+<div class="box">
+<div class="title">📅 2026-2027 求职全时间轴</div>
+<div class="time-item"><b>2026.3-6</b> 完善简历、备考教综、拿教资普通话</div>
+<div class="time-item"><b>2026.7-8</b> 暑假黄金复习、刷真题、练试讲</div>
+<div class="time-item"><b>2026.9-10</b> 秋招提前批（免笔试、最好机会）</div>
+<div class="time-item"><b>2026.11-12</b> 国考、秋招收尾、准备统考</div>
+<div class="time-item"><b>2027.1-2</b> 寒假二轮复习</div>
+<div class="time-item"><b>2027.2-4</b> 江苏教招统考（最大上岸窗口）</div>
+<div class="time-item"><b>2027.5-6</b> 签三方、毕业手续</div>
+<div class="time-item"><b>2027.7</b> 正式入职</div>
+</div>
+</div>
+
+<div class="page" id="p2">
+<div class="box">
+<div class="title">🎯 江苏教师编制（主渠道）</div>
+<div class="desc">时间：提前批9-12月，统考2-4月<br>条件：本科、教资、普通话<br>考试：教综+学科+试讲</div>
+</div>
+<div class="box">
+<div class="title">🌱 三支一扶（支教稳编）</div>
+<div class="desc">时间：5-6月报名<br>条件：应届/2年内未就业<br>优势：服务期满转事业编</div>
+</div>
+<div class="box">
+<div class="title">🛡️ 军队文职</div>
+<div class="desc">时间：10-12月、2-3月<br>岗位：教育、宣传、行政<br>优势：薪资高、稳定</div>
+</div>
+<div class="box">
+<div class="title">🏢 央国企 / 事业单位 / 公务员</div>
+<div class="desc">秋招春招都有，党建、宣传、文教岗<br>稳定、体面、适合师范生</div>
+</div>
+</div>
+
+<div class="page" id="p3">
+<div class="box">
+<div class="title">✍️ 学习打卡</div>
+<textarea id="d1" rows="3" placeholder="已完成：刷题/试讲/投递"></textarea>
+<textarea id="d2" rows="3" placeholder="未完成：薄弱项/计划"></textarea>
+<textarea id="d3" rows="2" placeholder="本周总结"></textarea>
+<button class="btn" onclick="save()">保存打卡</button>
+</div>
+<div class="box">
+<div class="title">📊 历史记录</div>
+<div class="desc" id="log"></div>
+</div>
+</div>
+
+<div class="page" id="p4">
+<div class="box">
+<div class="title">👤 个人信息</div>
+<input id="name" placeholder="姓名">
+<input id="school" placeholder="学校">
+<input id="major" placeholder="专业">
+<input id="jz" placeholder="教师资格证">
+<input id="putong" placeholder="普通话">
+<input id="city" placeholder="目标城市">
+<textarea id="beizhu" rows="3" placeholder="获奖/优势"></textarea>
+<button class="btn" onclick="saveInfo()">保存信息</button>
+</div>
+<div class="box">
+<div class="title">📋 信息预览</div>
+<div class="desc" id="myinfo"></div>
+</div>
+</div>
+
+<script>
+let ps=document.querySelectorAll(".page");
+let ts=document.querySelectorAll(".tab span");
+function g(i){
+ps.forEach(p=>p.classList.remove("show"));
+ts.forEach(t=>t.classList.remove("active"));
+ps[i].classList.add("show");
+ts[i].classList.add("active");
+}
+
+function tip(){
+let m=new Date().getMonth()+1;
+let s="";
+if(m>=3&&m<=6)s="现在：大三下学期，准备简历、教资、基础备考";
+else if(m>=7&&m<=8)s="现在：暑假黄金备考期，全力刷题练试讲！";
+else if(m>=9&&m<=10)s="现在：秋招提前批，最好机会，抓紧投！";
+else if(m>=11&&m<=12)s="现在：国考+秋招收尾，准备明年统考";
+else if(m==1||m==2)s="现在：寒假冲刺，备战春季教招";
+else if(m>=3&&m<=4)s="现在：江苏教招统考，全年最重要！";
+else s="现在：毕业签约，准备入职";
+document.getElementById("tip").innerText=s;
+}
+
+function down(){
+let n=new Date().getTime();
+let arr=[
+{name:"秋招提前批",t:new Date("2026-09-01").getTime()},
+{name:"江苏教招统考",t:new Date("2027-02-01").getTime()},
+{name:"三支一扶报名",t:new Date("2027-05-01").getTime()}
+];
+let h="";
+arr.forEach(a=>{let d=Math.floor((a.t-n)/86400000);if(d>0)h+=a.name+"：剩余"+d+"天\n";});
+document.getElementById("down").innerText=h||"暂无倒计时";
+}
+
+function save(){
+let a=document.getElementById("d1").value;
+let b=document.getElementById("d2").value;
+let c=document.getElementById("d3").value;
+let t=new Date().toLocaleString();
+let list=JSON.parse(localStorage.getItem("log")||"[]");
+list.unshift({t,a,b,c});
+localStorage.setItem("log",JSON.stringify(list));
+alert("保存成功");
+showLog();
+}
+
+function showLog(){
+let list=JSON.parse(localStorage.getItem("log")||"[]");
+let h="";
+list.forEach(i=>{h+=i.t+"\n已完成："+i.a+"\n待完成："+i.b+"\n总结："+i.c+"\n----------------\n";});
+document.getElementById("log").innerText=h||"无记录";
+}
+
+function saveInfo(){
+let o={
+name:document.getElementById("name").value,
+school:document.getElementById("school").value,
+major:document.getElementById("major").value,
+jz:document.getElementById("jz").value,
+putong:document.getElementById("putong").value,
+city:document.getElementById("city").value,
+beizhu:document.getElementById("beizhu").value
+};
+localStorage.setItem("myinfo",JSON.stringify(o));
+alert("信息保存成功");
+showInfo();
+}
+
+function showInfo(){
+let o=JSON.parse(localStorage.getItem("myinfo")||"{}");
+let h=`姓名：${o.name||""}\n学校：${o.school||""}\n专业：${o.major||""}\n教资：${o.jz||""}\n普通话：${o.putong||""}\n目标城市：${o.city||""}\n备注：${o.beizhu||""}`;
+document.getElementById("myinfo").innerText=h;
+}
+
+window.onload=function(){tip();down();showLog();showInfo();}
+</script>
+
+</body>
+</html>

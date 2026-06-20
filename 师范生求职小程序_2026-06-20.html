@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>江苏省师范生求职招聘信息汇总</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+.header { text-align: center; color: white; margin-bottom: 30px; }
+.header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+.header p { font-size: 1.1em; opacity: 0.9; }
+.update-time { background: rgba(255,255,255,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px; margin-top: 10px; font-size: 0.9em; }
+.stats { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+.stat-card { background: white; border-radius: 12px; padding: 20px; text-align: center; min-width: 150px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.stat-card .num { font-size: 2em; font-weight: bold; color: #667eea; }
+.stat-card .label { color: #666; margin-top: 5px; }
+.filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.filter-btn { padding: 10px 20px; border: none; border-radius: 25px; background: white; color: #667eea; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.filter-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+.filter-btn.active { background: #667eea; color: white; }
+.search-box { width: 100%; max-width: 600px; margin: 0 auto 30px; display: block; padding: 15px 20px; border: none; border-radius: 25px; font-size: 1em; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.jobs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+.job-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; }
+.job-card:hover { transform: translateY(-5px); box-shadow: 0 8px 12px rgba(0,0,0,0.2); }
+.job-card .city { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin-bottom: 10px; }
+.city-南京 { background: #e3f2fd; color: #1976d2; }
+.city-常州 { background: #f3e5f5; color: #7b1fa2; }
+.city-南通 { background: #e8f5e9; color: #388e3c; }
+.city-镇江 { background: #fff3e0; color: #f57c00; }
+.city-无锡 { background: #fce4ec; color: #c2185b; }
+.city-苏州 { background: #e0f2f1; color: #00796b; }
+.city-扬州 { background: #fff9c4; color: #f9a825; }
+.city-泰州 { background: #e8eaf6; color: #3f51b5; }
+.job-card h3 { font-size: 1.1em; margin-bottom: 10px; color: #333; line-height: 1.4; }
+.job-card .meta { display: flex; gap: 10px; font-size: 0.85em; color: #999; margin-top: 10px; }
+.job-card .source { color: #667eea; }
+.job-card .date { color: #999; }
+.no-results { text-align: center; color: white; font-size: 1.2em; padding: 40px; }
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.8em; }
+  .jobs-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🎓 江苏省师范生求职招聘信息</h1>
+    <p>覆盖南京、常州、南通、镇江、无锡、苏州、扬州、泰州 8 市</p>
+    <div class="update-time">📅 数据更新时间：2026-06-20</div>
+  </div>
+  
+  <div class="stats">
+    <div class="stat-card">
+      <div class="num" id="totalCount">0</div>
+      <div class="label">招聘公告</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="cityCount">0</div>
+      <div class="label">覆盖城市</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="latestDate">-</div>
+      <div class="label">最新公告</div>
+    </div>
+  </div>
+
+  <input type="text" class="search-box" placeholder="🔍 搜索招聘公告、城市、单位..." id="searchInput">
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-city="全部">全部</button>
+    <button class="filter-btn" data-city="南京">南京</button>
+    <button class="filter-btn" data-city="常州">常州</button>
+    <button class="filter-btn" data-city="南通">南通</button>
+    <button class="filter-btn" data-city="镇江">镇江</button>
+    <button class="filter-btn" data-city="无锡">无锡</button>
+    <button class="filter-btn" data-city="苏州">苏州</button>
+    <button class="filter-btn" data-city="扬州">扬州</button>
+    <button class="filter-btn" data-city="泰州">泰州</button>
+  </div>
+
+  <div class="jobs-grid" id="jobsGrid"></div>
+  <div class="no-results" id="noResults" style="display:none;">😕 没有找到匹配的招聘信息</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
